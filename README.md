@@ -1,6 +1,6 @@
 ### Expense Management
 
-This app is for money management
+rishabh
 
 ### Installation
 
