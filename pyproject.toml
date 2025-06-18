@@ -1,9 +1,9 @@
 [project]
 name = "expense_management"
 authors = [
-    { name = "Usage: bench new-app [OPTIONS] APP_NAME", email = "rarishab893@gmail.com"}
+    { name = "rishabh", email = "rarishab893@gmail.com"}
 ]
-description = "faizan@faizan:~/frappe-bench$ bench new-app Expense Management"
+description = "This app is for money management"
 requires-python = ">=3.10"
 readme = "README.md"
 dynamic = ["version"]

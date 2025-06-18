@@ -1,6 +1,6 @@
 ### Expense Management
 
-faizan@faizan:~/frappe-bench$ bench new-app Expense Management
+This app is for money management
 
 ### Installation
 
