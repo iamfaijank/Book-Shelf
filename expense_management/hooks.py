@@ -1,8 +1,8 @@
 app_name = "expense_management"
-app_title = "Expense Management"
+app_title = "Expense Managment"
 app_publisher = "rishabh"
-app_description = "rishabh"
-app_email = "rarishab893@gmail.com"
+app_description = "money app"
+app_email = "rarishabh893@gmail.com"
 app_license = "mit"
 
 # Apps
@@ -15,7 +15,7 @@ app_license = "mit"
 # 	{
 # 		"name": "expense_management",
 # 		"logo": "/assets/expense_management/logo.png",
-# 		"title": "Expense Management",
+# 		"title": "Expense Managment",
 # 		"route": "/expense_management",
 # 		"has_permission": "expense_management.api.permission.has_app_permission"
 # 	}
