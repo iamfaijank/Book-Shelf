@@ -1,0 +1,9 @@
+
+            {% set book = frappe.db.get_all("Book", fields=["book_name", "author"]) %}
+            <ol>
+                {% for b in book %}
+                    <li>{{ b.book_name }} by {{ b.author }}</li>
+                {% else %}
+                    <li>No Books Found.</li>
+                {% endfor %}
+            </ol>

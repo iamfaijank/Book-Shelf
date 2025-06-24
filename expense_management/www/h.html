@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Book Shelf</title>
+    <script src="https://unpkg.com/htmx.org@1.9.2"></script>
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.grey.min.css"
+    >
+    <img src="/home/faizan/Downloads/.jpeg" alt="My Logo" height="80">
+</head>
+<body class="container">
+
+    <nav>
+        <ul>
+            <li><strong>My Library</strong></li>
+        </ul>
+        <ul>
+            <li><a href="#">About</a></li>
+            <li><a href="#">Books</a></li>
+        </ul>
+    </nav>
+
+    <main class="grid">
+        <form 
+            hx-post="/api/v2/method/Book/new_book"
+            hx-headers='{"Content-Type": "application/json"}'
+            hx-on="submit: this.setAttribute('hx-vals', JSON.stringify({
+                'book_name': document.getElementById('book_name').value,
+                'author': document.getElementById('author').value
+            }))"
+            hx-target="#book-list"
+        >
+            <fieldset>
+                <label for="book_name">Book Title</label>
+                <input id="book_name" name="book_name" required />
+
+                <label for="author">Author</label>
+                <input id="author" name="author" required />
+            </fieldset>
+            <button type="submit">Create</button>
+        </form>
+
+        <div>
+            <article id="book-list">
+                {% include "templates/includes/Book_List.html" %}
+            </article>
+
+            <button
+                class="secondary"
+                hx-get="/api/v2/method/Book/book_list"
+                hx-target="#book-list"
+            >
+                Refresh
+            </button>
+        </div>
+    </main>
+
+</body>
+</html>

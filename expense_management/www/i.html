@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Book Shelf App</title>
+    <script src="https://unpkg.com/htmx.org@1.9.2"></script>
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.grey.min.css"
+    >
+</head>
+<body class="container">
+     <!-- Navigation Bar -->
+    <nav>
+        <ul>
+            <li><strong>My Library</strong></li>
+        </ul>
+        <ul>
+            <li><a  href="#" onclick="document.getElementById('aboutModal').showModal()">About</a></li>
+            <li><a href="#" onclick="document.getElementById('booksModal').showModal()">Books</a></li>
+        </ul>
+    </nav>
+
+    <!-- Header with Logo -->
+    <header style="display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem;">
+       
+        <h1>📚 My Book Shelf</h1>
+    </header>
+
+    <dialog id="booksModal">
+    <article style="max-height: 400px; overflow-y: auto;">
+        <header>
+            <h3>All Books</h3>
+        </header>
+        <ol>
+            {% set books = frappe.db.get_all("Book", fields=["book_name", "author"]) %}
+            {% for book in books %}
+                <li>{{ book.book_name }} by {{ book.author }}</li>
+            {% else %}
+                <li>No Books Available.</li>
+            {% endfor %}
+        </ol>
+        <footer>
+            <button onclick="document.getElementById('booksModal').close()">Close</button>
+        </footer>
+    </article>
+</dialog>
+
+
+
+    <!-- About Developer Modal Trigger Button --
+<button class="secondary" onclick="document.getElementById('aboutModal').showModal()">
+    About Developer
+</button>-->
+
+<!-- About Developer Modal -->
+<dialog id="aboutModal">
+    <article>
+        <header>
+            <h3>About the Developer</h3>
+        </header>
+        <p>
+            👨‍💻 Developed by <strong>Faizan Qureshi</strong><br>
+            🚀 Passionate Frappe & ERPNext Developer.<br>
+            📧 Email: faizan@example.com<br>
+            🌐 GitHub: github.com/faizan
+        </p>
+        <footer>
+            <button onclick="document.getElementById('aboutModal').close()">Close</button>
+        </footer>
+    </article>
+</dialog>
+
+
+   
+
+    <!-- Main Section -->
+    <main class="grid">
+        <section>
+
+        <!-- Book Entry Form -->
+        <form 
+            hx-post="/api/v2/method/Book/new_book"
+            hx-headers='{"Content-Type": "application/json"}'
+            hx-on="submit: this.setAttribute('hx-vals', JSON.stringify({
+                book_name: document.getElementById('book_name').value,
+                author: document.getElementById('author').value
+            }))"
+            hx-target="#book-list"
+            style="border: 1px solid #ccc; padding: 1rem; border-radius: 8px;"
+        >
+            <fieldset>
+               
+                <label for="book_name">Book Title</label>
+                <input id="book_name" name="book_name" placeholder="e.g. Atomic Habits" required />
+
+                <label for="author">Author</label>
+                <input id="author" name="author" placeholder="e.g. James Clear" required />
+            </fieldset>
+            <button type="submit">📚 Add Book</button>
+        </form>
+
+        <hr>
+
+        <!-- Search Book Form -->
+        <h3>Search Book</h3>
+        <form 
+            hx-get="/api/v2/method/Book/search_result"
+            hx-target="#search-result"
+            hx-trigger="submit"
+        >
+            <fieldset>
+                <label for="search_query">Book Name / Author</label>
+                <input id="search_query" name="search_query" placeholder="Enter book title or author..." required />
+            </fieldset>
+            <button type="submit">Search</button>
+        </form>
+
+        <div id="search-result">
+            <!-- Search results will appear here -->
+        </div>
+
+        </section>
+
+        <section>
+            <h2>Welcome to My Book Shelf App!</h2>
+            <p>
+                This app allows you to manage your personal book collection. You can add new books and view your collection.
+            </p>
+
+        <!-- Book List -->
+        <div>
+            <article id="book-list" style="margin-top: 2rem;">
+                <h4>Recent Books</h4>
+                {% include "templates/includes/Book_List.html" %}
+            </article>
+
+            <!-- Refresh Button -->
+            <button
+                class="secondary"
+                hx-get="/api/v2/method/Book/book_list"
+                hx-target="#book-list"
+                style="margin-top: 1rem;"
+            >
+                🔄 Refresh Book List
+            </button>
+        </div>
+        </section>
+    </main>
+
+</body>
+</html>
