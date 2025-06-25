@@ -5,20 +5,91 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Book Shelf App</title>
     <script src="https://unpkg.com/htmx.org@1.9.2"></script>
+    
     <link
         rel="stylesheet"
         href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.grey.min.css"
     >
+   <style>
+  /* Stars Background Layer */
+  .stars {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .star {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background: white;
+    border-radius: 50%;
+    opacity: 0.7;
+  }
+
+  body.light .stars {
+    display: none;
+  }
+   body.light {
+    background-color: #f4f4f4;
+    color: #333;
+  }
+   @keyframes twinkle {
+    0%, 100% { opacity: 0.2; }
+    50% { opacity: 1; }
+  }
+
+  .star {
+    animation: twinkle 2s infinite;
+    animation-delay: calc(0.1s * var(--i));
+  }
+</style>
+
 </head>
 <body class="container">
+    <div class="stars" id="stars"></div>
+
      <!-- Navigation Bar -->
     <nav>
         <ul>
             <li><strong>My Library</strong></li>
         </ul>
         <ul>
+            <li><a href="/">Home</a></li>
+            <li>    <li>
+  <form 
+    hx-get="/api/v2/method/Book/search_result"
+    hx-target="#search-result"
+    hx-trigger="submit"
+    style="display: flex; gap: 0.3rem; align-items: center; width: 200px;"
+  >
+    <input 
+      type="text" 
+      id="search_query" 
+      name="search_query" 
+      placeholder="Search..." 
+      required 
+      style="flex: 1; font-size: 0.8rem;"
+    />
+    <button type="submit" style="padding: 0.4rem 0.6rem;">🔍</button>
+  </form>
+</li>
+</li>
             <li><a  href="#" onclick="document.getElementById('aboutModal').showModal()">About</a></li>
             <li><a href="#" onclick="document.getElementById('booksModal').showModal()">Books</a></li>
+            
+    <li>
+  <label class="contrast" title="Toggle Light/Dark Mode">
+    <input type="checkbox" id="themeToggle" onclick="toggleTheme()" style="display: none;">
+    <span id="themeIcon" style="cursor: pointer;" title="Switch Theme">🌙</span>
+  </label>
+</li>
+
         </ul>
     </nav>
 
@@ -109,6 +180,7 @@
             hx-get="/api/v2/method/Book/search_result"
             hx-target="#search-result"
             hx-trigger="submit"
+            style="border: 1px solid #ccc; padding: 1rem; border-radius: 8px;"
         >
             <fieldset>
                 <label for="search_query">Book Name / Author</label>
@@ -148,6 +220,46 @@
         </div>
         </section>
     </main>
+<script>
+  function generateStars() {
+    const starsContainer = document.getElementById("stars");
+
+    // Only generate once if not already generated
+    if (starsContainer.childElementCount > 0) return;
+
+    const starCount = 100;
+
+    for (let i = 0; i < starCount; i++) {
+      const star = document.createElement("div");
+      star.classList.add("star");
+      star.style.top = Math.random() * 100 + "vh";
+      star.style.left = Math.random() * 100 + "vw";
+      star.style.setProperty('--i', i);
+      starsContainer.appendChild(star);
+    }
+  }
+
+  function toggleTheme() {
+    document.body.classList.toggle("light");
+    const icon = document.getElementById("themeIcon");
+    if (document.body.classList.contains("light")) {
+      icon.textContent = "🌞";
+      icon.title = "Switch to Dark Mode";
+    } else {
+      icon.textContent = "🌙";
+      icon.title = "Switch to Light Mode";
+    }
+    generateStars();
+  }
+
+  // Initial stars load if in dark mode
+  window.onload = () => {
+    if (!document.body.classList.contains("light")) {
+      generateStars();
+    }
+  };
+</script>
+
 
 </body>
 </html>

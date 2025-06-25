@@ -30,7 +30,7 @@ def book_list():
 	return Response(list)
 
 @frappe.whitelist(allow_guest=True)
-def search_book(search_query):
+def search_result(search_query):
     books = frappe.db.get_all("Book",
         filters=[["book_name", "like", f"%{search_query}%"], ["author", "like", f"%{search_query}%"]],
         or_filters=True,
